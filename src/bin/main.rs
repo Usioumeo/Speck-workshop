@@ -21,7 +21,7 @@ use embassy_net::{
 use embassy_time::{Duration, Timer};
 use esp_alloc as _;
 use esp_backtrace as _;
-use esp_hal::rng::Rng;
+use esp_hal::{peripherals, rng::Rng};
 use esp_println::println;
 use esp_radio::wifi::{
     Config, ControllerConfig, Interface, WifiController, scan::ScanConfig, sta::StationConfig,
@@ -46,10 +46,8 @@ const PASSWORD: &str = "YOUR_PASSWORD";
 #[esp_rtos::main]
 async fn main(spawner: Spawner) -> ! {
     let config = esp_hal::Config::default().with_cpu_clock(esp_hal::clock::CpuClock::max());
-    let peripherals = esp_hal::init(config);
 
-    init_heap_and_timers(peripherals.TIMG0, peripherals.SW_INTERRUPT);
-    let wifi = peripherals.WIFI;
+    let wifi = todo!();
 
     let station_config = Config::Station(
         StationConfig::default()
@@ -88,8 +86,10 @@ async fn main(spawner: Spawner) -> ! {
         println!("{:?}", ap);
     }
 
-    spawner.spawn(connection(controller).unwrap());
-    spawner.spawn(net_task(runner).unwrap());
+
+
+
+    
 
     stack.wait_config_up().await;
 
